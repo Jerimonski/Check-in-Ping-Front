@@ -1,7 +1,8 @@
 @import "tailwindcss";
 
 @theme {
-    --color-Green-Light: "#24ce40"
+    --color-Green-Light: #24ce40;
+    --color-Secondary-Text: #707070;
 }
 
 @font-face {
