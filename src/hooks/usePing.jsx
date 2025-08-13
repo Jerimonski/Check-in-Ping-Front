@@ -1,23 +1,35 @@
 import React, { useEffect, useState } from "react"
 import { io } from "socket.io-client"
-import PingCard from "../components/PingCard"
 
 export default function usePing() {
   const [pingData, setPingData] = useState([])
   const [connectionStatus, setConnectionStatus] = useState("Conectando...")
+  const [upCount, setUpCount] = useState(0)
+  const [downCount, setDownCount] = useState(0)
+  const [totalCount, setTotalCount] = useState(0)
+  const socket = io("http://127.0.0.1:5000")
 
   useEffect(() => {
-    const socket = io("http://localhost:5000")
-
     socket.on("connect", () => {
       setConnectionStatus("Conectado. Esperando datos...")
     })
 
-    socket.on("ping_response", (data) => {
+    socket.on("status_update", (data) => {
       console.log("Datos recibidos:", data)
-      if (Array.isArray(data)) {
-        setPingData(data)
+      if (data && Array.isArray(data.devices)) {
+        setPingData(data.devices)
         setConnectionStatus("Datos recibidos.")
+
+        const onlineDevices = data.devices.filter(
+          (device) => device.status === "UP"
+        )
+        const offlineDevices = data.devices.filter(
+          (device) => device.status === "DOWN"
+        )
+
+        setUpCount(onlineDevices.length)
+        setDownCount(offlineDevices.length)
+        setTotalCount(data.devices.length)
       } else {
         console.error("El formato de los datos no es un array:", data)
         setConnectionStatus("Error al recibir datos.")
@@ -27,6 +39,9 @@ export default function usePing() {
     socket.on("disconnect", () => {
       setConnectionStatus("Desconectado del servidor.")
       setPingData([])
+      setUpCount(0)
+      setDownCount(0)
+      setTotalCount(0)
     })
 
     return () => {
@@ -34,29 +49,5 @@ export default function usePing() {
     }
   }, [])
 
-  return (
-    <div className="container mx-auto p-4">
-      <h2 className="text-2xl font-bold mb-4 text-center text-gray-800">
-        Estado de la Conexión
-      </h2>
-      <p className="text-center text-gray-600 mb-6">{connectionStatus}</p>
-
-      <div className="flex flex-wrap justify-center gap-4">
-        {pingData.length > 0 ? (
-          pingData.map((device, index) => (
-            <PingCard
-              key={index}
-              name={device.name}
-              ip={device.ip}
-              isActive={device.is_active}
-            />
-          ))
-        ) : (
-          <p className="text-center text-gray-500">
-            No hay dispositivos para mostrar.
-          </p>
-        )}
-      </div>
-    </div>
-  )
+  return { pingData, connectionStatus, upCount, downCount, totalCount }
 }
