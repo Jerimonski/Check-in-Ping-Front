@@ -31,7 +31,6 @@ export default function usePing() {
         setDownCount(offlineDevices.length)
         setTotalCount(data.devices.length)
       } else {
-        console.error("El formato de los datos no es un array:", data)
         setConnectionStatus("Error al recibir datos.")
       }
     })
