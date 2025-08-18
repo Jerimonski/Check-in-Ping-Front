@@ -3,7 +3,8 @@
 </div>
 
 <!-- ABOUT THE PROJECT -->
-## Acerca del proyecto
+### Acerca del proyecto
+
 Un sistema de monitoreo el cual mediante un ping a las ip's cedidas verifica si el dispositivo esta caido o funcionando, con la capacidad
 de mandar un mensaje a traves de gmail avisando y mostrando una lista con los dispositivos caidos.
 
@@ -13,10 +14,6 @@ Motivos del proyecto:
 * Tener un sistema con una interfaz visual sencilla y facil de entender.
 
 ### Desarrollado con:
-
-This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
-
----
 ### Tecnologías
 * [![React][React.js]][React-url]
 * [![Vite][Vite.js]][Vite-url]
@@ -44,10 +41,6 @@ This section should list any major frameworks/libraries used to bootstrap your p
    git remote set-url origin https://github.com/Jerimonski/Check-in-Ping-Front.git
    git remote -v # Para confirmar los cambios
    ```
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
 
 <!-- Modo de uso -->
 ## Modo de uso
