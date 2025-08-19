@@ -6,6 +6,7 @@ export default function usePing() {
   const [connectionStatus, setConnectionStatus] = useState("Conectando...")
   const [upCount, setUpCount] = useState(0)
   const [downCount, setDownCount] = useState(0)
+  const [lostCount, setLostCount] = useState(0)
   const [totalCount, setTotalCount] = useState(0)
   const socket = io("http://127.0.0.1:5000")
 
@@ -21,14 +22,18 @@ export default function usePing() {
         setConnectionStatus("Datos recibidos.")
 
         const onlineDevices = data.devices.filter(
-          (device) => device.status === "UP"
+          (device) => device.status === "Activo"
         )
         const offlineDevices = data.devices.filter(
-          (device) => device.status === "DOWN"
+          (device) => device.status === "Caido"
+        )
+        const lostDevices = data.devices.filter(
+          (device) => device.active === "Perdido/s"
         )
 
         setUpCount(onlineDevices.length)
         setDownCount(offlineDevices.length)
+        setLostCount(lostDevices.length)
         setTotalCount(data.devices.length)
       } else {
         setConnectionStatus("Error al recibir datos.")
@@ -40,6 +45,7 @@ export default function usePing() {
       setPingData([])
       setUpCount(0)
       setDownCount(0)
+      setLostCount(0)
       setTotalCount(0)
     })
 
@@ -48,5 +54,12 @@ export default function usePing() {
     }
   }, [])
 
-  return { pingData, connectionStatus, upCount, downCount, totalCount }
+  return {
+    pingData,
+    connectionStatus,
+    upCount,
+    downCount,
+    lostCount,
+    totalCount,
+  }
 }

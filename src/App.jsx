@@ -6,17 +6,17 @@ import usePing from "./hooks/usePing"
 export default function App() {
   const [searchTerm, setSearchTerm] = useState("")
   const [filterStatus, setFilterStatus] = useState("all")
-  const { pingData, connectionStatus, upCount, downCount, totalCount } =
-    usePing()
+  const { pingData, connectionStatus } = usePing()
 
   const filteredDevices = pingData.filter((device) => {
+    const lostMatch = filterStatus === "all" || device.active === filterStatus
     const statusMatch = filterStatus === "all" || device.status === filterStatus
     const searchMatch =
       device.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       device.ip.includes(searchTerm)
-    return statusMatch && searchMatch
+    return (statusMatch && searchMatch) || (lostMatch && searchMatch)
   })
-
+  console.log(filterStatus)
   return (
     <main className="mx-auto w-[1120px]">
       <section>
@@ -28,11 +28,7 @@ export default function App() {
             </span>
           </div>
         </article>
-        <StatusSection
-          Activos={upCount}
-          Caidos={downCount}
-          Total={totalCount}
-        />
+        <StatusSection />
       </section>
       <section>
         <div className="py-6 px-6 space-y-4 border rounded-2xl border-[#d8d8d8]">
@@ -48,9 +44,9 @@ export default function App() {
           </div>
           <div className="flex justify-between gap-2 mt-4">
             <button
-              onClick={() => setFilterStatus("UP")}
+              onClick={() => setFilterStatus("Activo")}
               className={`py-2 px-4 rounded-xl font-semibold w-1/3 transition-colors ${
-                filterStatus === "UP"
+                filterStatus === "Activo"
                   ? "bg-green-600 text-white"
                   : "bg-gray-200 text-gray-800"
               }`}
@@ -58,14 +54,24 @@ export default function App() {
               Activos
             </button>
             <button
-              onClick={() => setFilterStatus("DOWN")}
+              onClick={() => setFilterStatus("Caido")}
               className={`py-2 px-4 rounded-xl font-semibold w-1/3 transition-colors ${
-                filterStatus === "DOWN"
+                filterStatus === "Caido"
                   ? "bg-red-600 text-white"
                   : "bg-gray-200 text-gray-800"
               }`}
             >
               Inactivos
+            </button>
+            <button
+              onClick={() => setFilterStatus("Perdido/s")}
+              className={`py-2 px-4 rounded-xl font-semibold w-1/3 transition-colors ${
+                filterStatus === "Perdido/s"
+                  ? "bg-yellow-600 text-white"
+                  : "bg-gray-200 text-gray-800"
+              }`}
+            >
+              Perdido/s
             </button>
             <button
               onClick={() => setFilterStatus("all")}
@@ -92,7 +98,7 @@ export default function App() {
                   key={index}
                   name={device.name}
                   ip={device.ip}
-                  isActive={device.status === "UP"}
+                  isActive={filterStatus}
                 />
               ))
             ) : (
