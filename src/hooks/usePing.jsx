@@ -8,7 +8,7 @@ export default function usePing() {
   const [downCount, setDownCount] = useState(0)
   const [lostCount, setLostCount] = useState(0)
   const [totalCount, setTotalCount] = useState(0)
-  const socket = io("http://127.0.0.1:5000")
+  const socket = io("http://localhost:5000")
 
   useEffect(() => {
     socket.on("connect", () => {
