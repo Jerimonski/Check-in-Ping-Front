@@ -14,9 +14,7 @@ export default function usePing() {
     socket.on("connect", () => {
       setConnectionStatus("Conectado. Esperando datos...")
     })
-
     socket.on("status_update", (data) => {
-      console.log("Datos recibidos:", data)
       if (data && Array.isArray(data.devices)) {
         setPingData(data.devices)
         setConnectionStatus("Datos recibidos.")

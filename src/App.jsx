@@ -7,7 +7,6 @@ export default function App() {
   const [searchTerm, setSearchTerm] = useState("")
   const [filterStatus, setFilterStatus] = useState("all")
   const { pingData, connectionStatus } = usePing()
-
   const filteredDevices = pingData.filter((device) => {
     const lostMatch = filterStatus === "all" || device.active === filterStatus
     const statusMatch = filterStatus === "all" || device.status === filterStatus
@@ -16,7 +15,6 @@ export default function App() {
       device.ip.includes(searchTerm)
     return (statusMatch && searchMatch) || (lostMatch && searchMatch)
   })
-  console.log(filterStatus)
   return (
     <main className="mx-auto w-[1120px]">
       <section>
@@ -96,9 +94,9 @@ export default function App() {
               filteredDevices.map((device, index) => (
                 <StatusCards
                   key={index}
+                  status={device.status}
                   name={device.name}
                   ip={device.ip}
-                  isActive={filterStatus}
                 />
               ))
             ) : (
