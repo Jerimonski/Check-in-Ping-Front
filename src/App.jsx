@@ -2,10 +2,13 @@ import { useState } from "react"
 import StatusCards from "./components/StatusCards"
 import StatusSection from "./components/StatusSection"
 import usePing from "./hooks/usePing"
+import { CiSquarePlus } from "react-icons/ci"
+import { RxCross2 } from "react-icons/rx"
 
 export default function App() {
   const [searchTerm, setSearchTerm] = useState("")
   const [filterStatus, setFilterStatus] = useState("all")
+  const [form, setForm] = useState(false)
   const { pingData, connectionStatus } = usePing()
   const filteredDevices = pingData.filter((device) => {
     const lostMatch = filterStatus === "all" || device.active === filterStatus
@@ -15,8 +18,9 @@ export default function App() {
       device.ip.includes(searchTerm)
     return (statusMatch && searchMatch) || (lostMatch && searchMatch)
   })
+
   return (
-    <main className="mx-auto w-[1120px]">
+    <main className="mx-auto w-full px-24">
       <section>
         <article className="pt-4">
           <h2 className="text-4xl font-semibold">Estado de red</h2>
@@ -83,13 +87,47 @@ export default function App() {
             </button>
           </div>
         </div>
-        <div className="container mx-auto p-4">
+        <div className="mx-auto py-4">
           <h2 className="text-2xl font-bold mb-4 text-center text-gray-800">
             Estado de la Conexión
           </h2>
           <p className="text-center text-gray-600 mb-6">{connectionStatus}</p>
-
           <div className="flex flex-wrap justify-center gap-4">
+            <button
+              onClick={() => setForm(!form)}
+              className="cursor-pointer p-4 space-y-4 w-64 flex flex-col items-center shadow-2xl rounded-2xl border-l-6 hover:scale-110 duration-500"
+            >
+              <CiSquarePlus size={70} />
+              <p className="text-xl font-semibold text-[#062913]">
+                Agregar un dispositivo
+              </p>
+            </button>
+            {form && (
+              <form className="p-4 space-y-4 absolute bg-white flex flex-col shadow-2xl rounded-2xl">
+                <div className="flex justify-end">
+                  <button
+                    className="p-2 hover:text-white cursor-pointer w-max rounded-lg duration-300 hover:bg-black"
+                    onClick={() => setForm(!form)}
+                  >
+                    <RxCross2 size={20} />
+                  </button>
+                </div>
+                <div className="flex flex-col space-y-2">
+                  <label>Nombre</label>
+                  <input
+                    className="border rounded-lg"
+                    type="text"
+                    name="nombre"
+                  />
+                  <label>ip</label>
+                  <input
+                    className="border rounded-lg"
+                    type="text"
+                    name="nombre"
+                  />
+                </div>
+              </form>
+            )}
             {filteredDevices.length > 0 ? (
               filteredDevices.map((device, index) => (
                 <StatusCards
@@ -100,7 +138,7 @@ export default function App() {
                 />
               ))
             ) : (
-              <p className="text-center text-gray-500">
+              <p className="flex items-center px-2 text-lg text-gray-500">
                 No hay dispositivos para mostrar.
               </p>
             )}
