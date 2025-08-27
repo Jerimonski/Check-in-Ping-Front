@@ -2,13 +2,11 @@ import { useState } from "react"
 import StatusCards from "./components/StatusCards"
 import StatusSection from "./components/StatusSection"
 import usePing from "./hooks/usePing"
-import { CiSquarePlus } from "react-icons/ci"
-import { RxCross2 } from "react-icons/rx"
+import AppendCard from "./components/appendCard"
 
 export default function App() {
   const [searchTerm, setSearchTerm] = useState("")
   const [filterStatus, setFilterStatus] = useState("all")
-  const [form, setForm] = useState(false)
   const { pingData, connectionStatus } = usePing()
   const filteredDevices = pingData.filter((device) => {
     const lostMatch = filterStatus === "all" || device.active === filterStatus
@@ -93,41 +91,7 @@ export default function App() {
           </h2>
           <p className="text-center text-gray-600 mb-6">{connectionStatus}</p>
           <div className="flex flex-wrap justify-center gap-4">
-            <button
-              onClick={() => setForm(!form)}
-              className="cursor-pointer p-4 space-y-4 w-64 flex flex-col items-center shadow-2xl rounded-2xl border-l-6 hover:scale-110 duration-500"
-            >
-              <CiSquarePlus size={70} />
-              <p className="text-xl font-semibold text-[#062913]">
-                Agregar un dispositivo
-              </p>
-            </button>
-            {form && (
-              <form className="p-4 space-y-4 absolute bg-white flex flex-col shadow-2xl rounded-2xl">
-                <div className="flex justify-end">
-                  <button
-                    className="p-2 hover:text-white cursor-pointer w-max rounded-lg duration-300 hover:bg-black"
-                    onClick={() => setForm(!form)}
-                  >
-                    <RxCross2 size={20} />
-                  </button>
-                </div>
-                <div className="flex flex-col space-y-2">
-                  <label>Nombre</label>
-                  <input
-                    className="border rounded-lg"
-                    type="text"
-                    name="nombre"
-                  />
-                  <label>ip</label>
-                  <input
-                    className="border rounded-lg"
-                    type="text"
-                    name="nombre"
-                  />
-                </div>
-              </form>
-            )}
+            <AppendCard></AppendCard>
             {filteredDevices.length > 0 ? (
               filteredDevices.map((device, index) => (
                 <StatusCards
