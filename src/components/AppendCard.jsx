@@ -24,7 +24,6 @@ export default function AppendCard() {
 
     try {
       await axios.post("http://localhost:5000/postDevices", newDevice)
-      console.log("Dispositivo creado con éxito")
       setNewDevice({ nombre: "", ip: "" })
     } catch (error) {
       console.error("Error al crear deporte:", error)
