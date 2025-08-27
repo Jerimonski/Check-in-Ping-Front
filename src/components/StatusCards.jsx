@@ -3,7 +3,7 @@ import { MdDeleteForever } from "react-icons/md"
 
 export default function StatusCard({ name, ip, status }) {
   const cardClasses =
-    "px-4 w-64 flex flex-col justify-center text-center place-items-center shadow-2xl rounded-2xl border-l-6"
+    "px-4 w-64 h-38 flex flex-col justify-center text-center place-items-center shadow-2xl rounded-2xl border-l-6"
 
   let statusClasses = "font-bold py-2"
   if (status == "Activo") {
