@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { io } from "socket.io-client"
 
 export default function usePing() {
@@ -8,7 +8,7 @@ export default function usePing() {
   const [downCount, setDownCount] = useState(0)
   const [lostCount, setLostCount] = useState(0)
   const [totalCount, setTotalCount] = useState(0)
-  const socket = io("http://localhost:5000")
+  const socket = io(import.meta.env.VITE_API)
 
   useEffect(() => {
     socket.on("connect", () => {
