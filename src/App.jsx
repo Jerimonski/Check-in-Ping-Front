@@ -98,6 +98,7 @@ export default function App() {
                   key={index}
                   status={device.status}
                   name={device.name}
+                  localizacion={device.localizacion}
                   ip={device.ip}
                 />
               ))
