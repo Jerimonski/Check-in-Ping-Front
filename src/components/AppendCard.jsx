@@ -1,40 +1,35 @@
-import axios from "axios"
 import { useState } from "react"
 import { CiSquarePlus } from "react-icons/ci"
 import { RxCross2 } from "react-icons/rx"
+import usePost from "../hooks/usePost"
 
 export default function AppendCard() {
   const [form, setForm] = useState(false)
-  const [newDevice, setNewDevice] = useState({ nombre: "", ip: "" })
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const handleChange = (e) => {
+  const [formData, setFormData] = useState({
+    nombre: "",
+    ip: "",
+    localizacion: "",
+  })
+  const { makeRequest, newDevice } = usePost()
+
+  const handleInputChange = (e) => {
     const { name, value } = e.target
-    setNewDevice({
-      ...newDevice,
-      [name]: value,
-    })
+    setFormData((prev) => ({ ...prev, [name]: value }))
   }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
-
-    if (isSubmitting) {
-      return
-    }
-    setIsSubmitting(true)
-
-    try {
-      await axios.post("http://localhost:5000/postDevices", newDevice)
-      setNewDevice({ nombre: "", ip: "" })
-    } catch (error) {
-      console.error("Error al crear deporte:", error)
-    }
+    await makeRequest(formData)
+    setFormData({ nombre: "", ip: "", localizacion: "" })
+    setForm(!form)
   }
+
   return (
     <div>
       {form === true ? (
         <form
           onSubmit={handleSubmit}
-          className="p-2 bg-white w-64 h-64 flex flex-col shadow-2xl rounded-2xl"
+          className="p-2 bg-white w-64 h-max flex flex-col shadow-2xl rounded-2xl"
         >
           <div className="flex justify-end">
             <button
@@ -52,7 +47,7 @@ export default function AppendCard() {
               type="text"
               name="nombre"
               value={newDevice.nombre}
-              onChange={handleChange}
+              onChange={handleInputChange}
             />
             <label>ip</label>
             <input
@@ -61,7 +56,16 @@ export default function AppendCard() {
               type="text"
               name="ip"
               value={newDevice.ip}
-              onChange={handleChange}
+              onChange={handleInputChange}
+            />
+            <label>Descripcion</label>
+            <input
+              required
+              className="border rounded-lg py-1 px-2"
+              type="text"
+              name="localizacion"
+              value={newDevice.localizacion}
+              onChange={handleInputChange}
             />
           </div>
           <button
@@ -74,7 +78,7 @@ export default function AppendCard() {
       ) : (
         <button
           onClick={() => setForm(!form)}
-          className="cursor-pointer p-4 space-y-4 w-64 h-38 flex flex-col items-center shadow-2xl rounded-2xl border-l-6 hover:scale-110 duration-500"
+          className="cursor-pointer py-8 space-y-4 w-64 h-48 flex flex-col items-center shadow-2xl rounded-2xl border-l-6 hover:scale-110 duration-300"
         >
           <CiSquarePlus size={70} />
           <p className="text-xl font-semibold text-[#062913]">

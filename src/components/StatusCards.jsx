@@ -1,14 +1,20 @@
-import axios from "axios"
 import { useState } from "react"
 import { FaEdit } from "react-icons/fa"
 import { MdDeleteForever } from "react-icons/md"
 import { RxCross2 } from "react-icons/rx"
+import useDelete from "../hooks/useDelete"
+import usePatch from "../hooks/usePatch"
 
-export default function StatusCard({ name, ip, status }) {
+export default function StatusCard({ name, ip, localizacion, status }) {
   const [confirmation, setConfirmation] = useState(false)
   const [editForm, setEditForm] = useState(false)
-  const [newDevice, setNewDevice] = useState({ nombre: "", ip: "" })
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [newDevice, setNewDevice] = useState({
+    nombre: "",
+    ip: "",
+    localizacion: "",
+  })
+  const { deleteRequest } = useDelete()
+  const { makeUpdate, updateDevice } = usePatch()
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -18,30 +24,17 @@ export default function StatusCard({ name, ip, status }) {
     })
   }
   const cardClasses =
-    "px-4 w-64 h-38 flex flex-col justify-center text-center place-items-center shadow-2xl rounded-2xl border-l-6"
+    "px-4 w-64 h-48 flex flex-col justify-center text-center place-items-center shadow-2xl rounded-2xl border-l-6"
 
   const handleDelete = async () => {
-    try {
-      await axios.delete(`http://localhost:5000/devices/${name}`)
-    } catch (e) {
-      console.error("error al eliminar dispositivo:", e)
-    }
+    await deleteRequest(ip)
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-
-    if (isSubmitting) {
-      return
-    }
-    setIsSubmitting(true)
-
-    try {
-      await axios.patch(`http://localhost:5000/devices/${name}`, newDevice)
-      setNewDevice({ nombre: "", ip: "" })
-    } catch (error) {
-      console.error("Error al crear deporte:", error)
-    }
+    await makeUpdate(ip, newDevice)
+    setNewDevice({ nombre: "", ip: "", localizacion: "" })
+    setEditForm(!editForm)
   }
 
   let statusClasses = "font-bold py-2"
@@ -66,7 +59,7 @@ export default function StatusCard({ name, ip, status }) {
         ) : (
           <form
             onSubmit={handleSubmit}
-            className="p-2 absolute z-50 bg-white text-black w-64 h-64 flex flex-col shadow-2xl rounded-2xl"
+            className="p-2 absolute z-50 bg-white text-black w-64 h-max flex flex-col shadow-2xl rounded-2xl"
           >
             <div className="flex justify-end">
               <button
@@ -82,7 +75,7 @@ export default function StatusCard({ name, ip, status }) {
                 className="border rounded-lg py-1 px-2"
                 type="text"
                 name="nombre"
-                value={newDevice.nombre}
+                value={updateDevice.nombre}
                 onChange={handleChange}
               />
               <label>Nueva ip</label>
@@ -90,7 +83,15 @@ export default function StatusCard({ name, ip, status }) {
                 className="border rounded-lg p-1 px-2"
                 type="text"
                 name="ip"
-                value={newDevice.ip}
+                value={updateDevice.ip}
+                onChange={handleChange}
+              />
+              <label>Nueva Direccion</label>
+              <input
+                className="border rounded-lg p-1 px-2"
+                type="text"
+                name="localizacion"
+                value={updateDevice.localizacion}
                 onChange={handleChange}
               />
             </div>
@@ -119,7 +120,7 @@ export default function StatusCard({ name, ip, status }) {
             </button>
             <button
               className="cursor-pointer text-green-600 hover:bg-green-600 hover:text-white rounded-lg px-2 duration-300"
-              onClick={() => handleDelete()}
+              onClick={handleDelete}
             >
               Confirmar
             </button>
@@ -130,8 +131,11 @@ export default function StatusCard({ name, ip, status }) {
       <p className="mt-2 text-lg text-gray-600">
         <strong className="font-light">IP:</strong> {ip}
       </p>
-      <p className="mt-1">
-        <span className={`text-xl text-center w-36 rounded-4xl`}>{status}</span>
+      <p className="mt-1 flex flex-col">
+        <span className={`text-xl text-center mx-auto w-36 rounded-4xl`}>
+          {status}
+        </span>
+        <cite className="text-black">{localizacion}</cite>
       </p>
     </div>
   )
