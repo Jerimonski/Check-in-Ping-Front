@@ -45,23 +45,24 @@ Motivos del proyecto:
 <!-- Modo de uso -->
 ## Modo de uso
 
-Primero cuenta con 3 cuadros los cuales enumeran la cantidad de dispositivos conectados (Online), Desconectados (Offline) y el total de dispositivos.
+Este frontend está diseñado para funcionar en conjunto con el backend. La comunicación se realiza a través de WebSockets, por lo que es esencial que el backend esté en ejecución antes de iniciar este proyecto.
 
-<br>
+### Ejecucion
+1. Asegúrate de que el servidor del backend esté corriendo en http://localhost:5000. Si no es así, consulta el <a href="">README</a> del backend para saber cómo iniciarlo.
+2. Abre una terminal en la carpeta raíz de este repositorio y ejecuta la aplicación:
+```sh
+npm run dev
+```
+3. El proyecto se abrirá en tu navegador, mostrando la interfaz que se conecta al backend para obtener los datos.
+   
+### Caracteristicas de la interfaz
+la ui cuenta con varias secciones de monitoreo:
+* Estados: Hay 4 cuadros que representan cada estadode los dispositivos, Activo (online), Caido (offline), Perdido/s (lost) y el total de dispositivos.
+* Barra de busqueda y filtros: Un campo de busqueda que te permite filtrar dispositivos por nombre o direccion ip, y tiene botones de filtro para ver rapidamente los dispositivos.
+* Panel de dispositivos: Un panel principal que muestra cada dispositivo en un cuadro individual con informacion de cada uno como el nombre, ip, estado y descripcion.
+* Vista general: 
+<img width="597" height="633" alt="image" src="https://github.com/user-attachments/assets/ae0e86b1-25ad-4ba7-a7d8-786581ba051d" />
 
-<img width="589" height="163" alt="image" src="https://github.com/user-attachments/assets/b0ea2731-578b-47f0-8903-d48f07c753a3" />
-
-<br>
-Tambien cuenta con una barra de busqueda que puede filtrar tanto por nombre como por ip y 3 botones de filtro general para dispositivos activos, inactivos y todos.
-<img width="567" height="109" alt="image" src="https://github.com/user-attachments/assets/49eff4a5-a8f9-4364-a171-a8bfdba2de69" />
-
-<br>
-Finalmente hay un panel donde muestra cada dispositivo en un recuadro como ayuda visual para ver mas informacion sobre cada ip.
-<img width="559" height="368" alt="image" src="https://github.com/user-attachments/assets/1dc82d83-9cae-4d40-b157-cf1fcf0e0168" />
-
-<br>
-Asi se veria el visual general del proyecto
-<img width="601" height="540" alt="image" src="https://github.com/user-attachments/assets/9f631bd7-b322-4fdb-a9ec-05ef91f137dd" />
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
