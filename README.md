@@ -48,7 +48,7 @@ Motivos del proyecto:
 Este frontend está diseñado para funcionar en conjunto con el backend. La comunicación se realiza a través de WebSockets, por lo que es esencial que el backend esté en ejecución antes de iniciar este proyecto.
 
 ### Ejecucion
-1. Asegúrate de que el servidor del backend esté corriendo en http://localhost:5000. Si no es así, consulta el README del backend para saber cómo iniciarlo.
+1. Asegúrate de que el servidor del backend esté corriendo en http://localhost:5000. Si no es así, consulta el <a href="">README</a> del backend para saber cómo iniciarlo.
 2. Abre una terminal en la carpeta raíz de este repositorio y ejecuta la aplicación:
 ```sh
 npm run dev
